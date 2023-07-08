@@ -7,7 +7,7 @@ public class PlayerPhysics : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform colliderParent;
-    [SerializeField] private Collider2D playerCollider, bulletCollider;
+    [SerializeField] private Collider2D playerCollider;
 
     [SerializeField] private bool ignoreEnemyCollision;
 

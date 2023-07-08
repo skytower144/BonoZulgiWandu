@@ -7,6 +7,7 @@ public class DragShoot : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private TrajectoryRenderer tr;
+    [SerializeField] private Animator anim;
 
     private Vector3 clickedPoint, releasePoint, movDir;
     private Camera cam;
@@ -19,12 +20,12 @@ public class DragShoot : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Wall") || other.gameObject.CompareTag("Enemy"))
-        {
-            movDir = Vector2.Reflect(movDir, other.contacts[0].normal).normalized;
-            rb.velocity = movDir * speed * 0.5f;
-            RotateSprite(movDir);
-        }
+        movDir = Vector2.Reflect(movDir, other.contacts[0].normal).normalized;
+        rb.velocity = movDir * speed * 0.3f;
+        RotateSprite(movDir);
+
+        if (other.gameObject.CompareTag("Wall"))
+            PlayAngryAnimation();
     }
     void Update()
     {
@@ -39,6 +40,9 @@ public class DragShoot : MonoBehaviour
         {
             PressMouse();
             tr.RenderLine(transform.localPosition, cam.ScreenToWorldPoint(Input.mousePosition));
+
+            if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Bullet_Stretch"))
+                anim.Play("Bullet_Stretch", -1, 0f);
         }
         else if (Input.GetMouseButtonUp(0))
         {
@@ -58,7 +62,10 @@ public class DragShoot : MonoBehaviour
 
     private void ReleaseMouse()
     {
+        if (!isHolding) return;
+
         Time.timeScale = 1;
+        anim.Play("Bullet_Shoot", -1, 0f);
         releasePoint = cam.ScreenToWorldPoint(Input.mousePosition);
         isHolding = false;
     }
@@ -92,5 +99,15 @@ public class DragShoot : MonoBehaviour
         }
         angle %= 360;
         transform.rotation = Quaternion.Euler(0, 0, angle - 90);
+    }
+
+    public void PlayAngryAnimation()
+    {
+        anim.Play("Bullet_Angry", -1, 0f);
+    }
+
+    private void ReturnShootingAnimation()
+    {
+        anim.Play("Bullet_Shoot", -1, 0f);
     }
 }

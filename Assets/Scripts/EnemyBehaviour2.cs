@@ -19,6 +19,16 @@ public class EnemyBehaviour2 : MonoBehaviour
         Launch();
     }
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        rb.velocity = Vector2.Reflect(lastVelocity, collision.contacts[0].normal);
+
+        if (collision.gameObject.CompareTag("Bullet")) {
+            collision.gameObject.GetComponent<DragShoot>().PlayAngryAnimation();
+            StartCoroutine(DestroyEnemy());
+        }
+    }
+
     private void Launch()
     {
         float x = Random.Range(0, 2) == 0 ? -1 : 1;
@@ -38,8 +48,9 @@ public class EnemyBehaviour2 : MonoBehaviour
         lastVelocity = rb.velocity;
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    IEnumerator DestroyEnemy()
     {
-        rb.velocity = Vector2.Reflect(lastVelocity, collision.contacts[0].normal);
+        yield return new WaitForSecondsRealtime(0.05f);
+        Destroy(gameObject);
     }
 }
