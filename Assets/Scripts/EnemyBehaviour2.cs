@@ -2,22 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerPhysics : MonoBehaviour
+public class EnemyBehaviour2 : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private Transform colliderParent;
-    [SerializeField] private Collider2D playerCollider, bulletCollider;
-
-    [SerializeField] private bool ignoreEnemyCollision;
-
     private Vector2 lastVelocity;
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy"))
-            return; //Debug.Log("hit");
-    }
 
     void FixedUpdate()
     {
@@ -27,7 +16,6 @@ public class PlayerPhysics : MonoBehaviour
 
     void Start()
     {
-        if (ignoreEnemyCollision) IgnoreEnemies();
         Launch();
     }
 
@@ -43,14 +31,6 @@ public class PlayerPhysics : MonoBehaviour
         Vector2 playerVector = rb.velocity.normalized;
         if ((playerVector.x < 0 && transform.localScale.x > 0) || (playerVector.x > 0 && transform.localScale.x < 0))
             transform.localScale = new Vector2(transform.localScale.x * -1, transform.localScale.y);
-    }
-
-    private void IgnoreEnemies()
-    {
-        Collider2D[] enemies = colliderParent.GetComponentsInChildren<Collider2D>(true);
-
-        foreach (Collider2D col in enemies)
-            Physics2D.IgnoreCollision(col, playerCollider);
     }
 
     private void KeepSpeed()
