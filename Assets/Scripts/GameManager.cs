@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 
     public PlayerPhysics playerPhysics;
     public PlayerBehaviour playerBehaviour;
+    public PlayerHealth playerHealth;
     public EnemySpawner enemySpawner;
 
     private List<GameObject> objects_ctrl = new List<GameObject>();

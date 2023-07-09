@@ -16,8 +16,9 @@ public class DragShoot : MonoBehaviour
     private Vector3 clickedPoint, releasePoint, movDir;
     private Camera cam;
     private bool isHolding = false;
-    private bool isReleased = false;
+    [SerializeField] private bool isReleased = false;
     private bool enableDrag = false;
+    private bool isCountdown = false;
 
     private Vector2 lastVelocity;
 
@@ -38,6 +39,7 @@ public class DragShoot : MonoBehaviour
         if (other.gameObject.CompareTag("Player")) {
             if (isReleased) {
                 GameManager.instance.playerPhysics.FlashEffect();
+                GameManager.instance.playerHealth.DecreaseHealth();
                 rb.velocity = Vector3.zero;
                 anim.Play("Bullet_Die", -1, 0f);
                 return;
@@ -62,7 +64,7 @@ public class DragShoot : MonoBehaviour
     void Update()
     {
         if (!enableDrag) return;
-        AliveTimeCountDown();
+        if (isCountdown) AliveTimeCountDown();
 
         if (isReleased) return;
         RotateBullet();
@@ -107,6 +109,7 @@ public class DragShoot : MonoBehaviour
 
         isHolding = false;
         isReleased = true;
+        isCountdown = true;
     }
 
     private void MoveBullet()
@@ -162,11 +165,11 @@ public class DragShoot : MonoBehaviour
 
     private void AliveTimeCountDown()
     {
-        if (!isReleased) return;
-
         aliveTime -= Time.deltaTime;
-        if (aliveTime < 0)
+        if (aliveTime < 0) {
+            isCountdown = false;
             DestroyBullet();
+        }
     }
 
     private void DestroyBullet()
