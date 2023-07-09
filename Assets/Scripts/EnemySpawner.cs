@@ -81,12 +81,11 @@ public class EnemySpawner : MonoBehaviour
 
     public void ClearAllEnemy()
     {
-        foreach (GameObject enemy in currentEnemies) {
-            Destroy(enemy);
+        foreach (Transform enemy in transform) {
+            Destroy(enemy.gameObject);
         }
         currentEnemies.Clear();
         waveNumber = 0;
-        totalSpawn = 0;
 
         isWaveCompleted = true;
         isBatchLoaded = false;

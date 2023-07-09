@@ -85,6 +85,8 @@ public class DragShoot : MonoBehaviour
             DOTween.Pause("SpinBullet");
             DOTween.Rewind("SpinBullet");
             PressMouse();
+
+            GameManager.instance.soundEffects.PlaySound(4);
         }
 
         if (Input.GetMouseButton(0))

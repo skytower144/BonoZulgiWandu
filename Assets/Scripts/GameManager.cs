@@ -55,6 +55,8 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         Debug.Log("Game Over.");
+        soundEffects.PlaySound(5);
+
         isGameOver = true;
         playerBehaviour.EraseBullet();
         gameTimer.StopTimer();

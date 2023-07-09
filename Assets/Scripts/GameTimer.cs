@@ -33,8 +33,9 @@ public class GameTimer : MonoBehaviour
         
         int afterTime = Mathf.FloorToInt(timer);
         timerUI.text = Mathf.FloorToInt(timer).ToString();
-        timerUI.color = timer < 4 ? Color.red : Color.yellow;
-
+        if (timer < 4)
+            timerUI.color =  Color.red;
+        
         if (afterTime != beforeTime) {
             DOTween.Rewind("TimerBounce");
             DOTween.Play("TimerBounce");
@@ -58,6 +59,7 @@ public class GameTimer : MonoBehaviour
     {
         timer = maxTime;
         enableTimer = true;
+        timerUI.color = Color.black;
     }
 
 }
