@@ -44,6 +44,8 @@ public class DragShoot : MonoBehaviour
                 GameManager.instance.playerHealth.DecreaseHealth();
                 rb.velocity = Vector3.zero;
                 anim.Play("Bullet_Die", -1, 0f);
+
+                GameManager.instance.soundEffects.PlaySound(3);
                 return;
             }
         }
@@ -58,11 +60,15 @@ public class DragShoot : MonoBehaviour
                 currentCombo++;
                 GameManager.instance.scoreManager.UpdateComboScore(other.gameObject.GetComponent<EnemyBehaviour2>().enemy_type, currentCombo);
                 StartCoroutine(other.gameObject.GetComponent<EnemyBehaviour2>().DestroyEnemy());
+
+                GameManager.instance.soundEffects.PlaySound(2);
             }
         }
 
         else if (other.gameObject.CompareTag("Wall")) {
             WallHit(transform.localPosition, other.gameObject.GetComponent<WallType>().side);
+
+            GameManager.instance.soundEffects.PlaySound(1);
         }
     }
     void Update()
@@ -114,6 +120,8 @@ public class DragShoot : MonoBehaviour
         isHolding = false;
         isReleased = true;
         isCountdown = true;
+
+        GameManager.instance.soundEffects.PlaySound(0);
     }
 
     private void MoveBullet()

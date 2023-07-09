@@ -27,7 +27,13 @@ public class PlayerBehaviour : MonoBehaviour
 
     private bool CanSpawnBullet()
     {
-        return ((cacheBullet == null) && !GameManager.instance.enemySpawner.isWaveCompleted && GameManager.instance.enemySpawner.isBatchLoaded && !GameManager.instance.isGameOver);
+        return (
+            (cacheBullet == null) &&
+            !GameManager.instance.enemySpawner.isWaveCompleted &&
+            GameManager.instance.enemySpawner.isBatchLoaded &&
+            !GameManager.instance.isGameOver &&
+            (transform.localPosition.y >= -2.9f)
+        );
     }
     public bool IsBulletAlive()
     {

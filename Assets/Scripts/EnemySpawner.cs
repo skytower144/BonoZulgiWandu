@@ -10,7 +10,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int minEnemyCount, maxEnemyCount;
 
     private List<GameObject> currentEnemies; public List<GameObject> current_enemies => currentEnemies;
-    private Bounds colliderBounds;
+    private Bounds colliderBounds; public Bounds collider_bounds => colliderBounds;
     private Vector3 colliderCenter;
 
     private int totalSpawn;

@@ -1,4 +1,4 @@
-using System.Linq;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public EnemySpawner enemySpawner;
     public GameTimer gameTimer;
     public ScoreManager scoreManager;
+    public SounEffectsPlayer soundEffects; 
 
     [SerializeField] private GameObject gameOverUI;
 
@@ -62,6 +63,8 @@ public class GameManager : MonoBehaviour
 
     public void RetryGame()
     {
+        soundEffects.PlaySound(0);
+
         isGameOver = false;
 
         playerPhysics.transform.localPosition = new Vector2(0f, 0f);
@@ -73,6 +76,11 @@ public class GameManager : MonoBehaviour
         
         enemySpawner.ClearAllEnemy();
         gameOverUI.SetActive(false);
+    }
+
+    public void ReturnToTitle()
+    {
+        SceneManager.LoadScene("TitleScreen");
     }
 
 }
