@@ -8,6 +8,7 @@ public class DragShoot : MonoBehaviour
     [SerializeField] private float aliveTime;
 
     [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Collider2D bulletCollider;
     [SerializeField] private TrajectoryRenderer tr;
     [SerializeField] private Animator anim;
 
@@ -15,6 +16,7 @@ public class DragShoot : MonoBehaviour
     private Camera cam;
     private bool isHolding = false;
     private bool isReleased = false;
+    private bool enableDrag = false;
 
     private Vector2 lastVelocity;
 
@@ -33,11 +35,17 @@ public class DragShoot : MonoBehaviour
         rb.velocity = Vector2.Reflect(lastVelocity, other.contacts[0].normal);
         RotateSprite(rb.velocity);
 
-        if (other.gameObject.CompareTag("Wall"))
-            PlayAngryAnimation();
+        if (other.gameObject.CompareTag("Enemy")) {
+            if (!isReleased) PlayAngryToHappy();
+            else PlayAngryAnimation();
+        }
+        
+        if (other.gameObject.CompareTag("Player"))
+            GameManager.instance.playerPhysics.FlashEffect();
     }
     void Update()
     {
+        if (!enableDrag) return;
         AliveTimeCountDown();
 
         if (isReleased) return;
@@ -119,9 +127,19 @@ public class DragShoot : MonoBehaviour
         anim.Play("Bullet_Angry", -1, 0f);
     }
 
+    private void PlayAngryToHappy()
+    {
+        anim.Play("Bullet_AngryToHappy", -1, 0f);
+    }
+
     private void ReturnShootingAnimation()
     {
         anim.Play("Bullet_Shoot", -1, 0f);
+    }
+
+    private void ReturnIdleAnimation()
+    {
+        anim.Play("Bullet_Idle", -1, 0f);
     }
 
     private void AliveTimeCountDown()
@@ -137,5 +155,12 @@ public class DragShoot : MonoBehaviour
     {
         GameManager.instance.PlayAllObjects();
         Destroy(gameObject);
+    }
+
+    public IEnumerator EnableDrag()
+    {
+        yield return new WaitForSecondsRealtime(0.2f);
+        bulletCollider.enabled = true;
+        enableDrag = true;
     }
 }

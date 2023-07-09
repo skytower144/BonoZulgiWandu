@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour
 {
-    [SerializeField] private GameObject bullet;
+    [SerializeField] private Animator anim;
+    [SerializeField] private GameObject bullet, smoke;
     private GameObject cacheBullet = null;
 
     void Start()
     {
-        //InvokeRepeating("SpawnBullet", 0.5f, 1f);
+        InvokeRepeating("SpawnBullet", 1f, 1f);
     }
 
     void Update()
@@ -19,14 +20,24 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void SpawnBullet()
     {
-        if (IsBulletAlive()) return;
+        if (!CanSpawnBullet()) return;
 
-        cacheBullet = Instantiate(bullet, transform.parent);
+        anim.Play("Player_Shoot", -1, 0f);
+        cacheBullet = Instantiate(bullet, transform);
+        cacheBullet.transform.SetParent(transform.parent);
+        StartCoroutine(cacheBullet.GetComponent<DragShoot>().EnableDrag());
+
+        Instantiate(smoke, transform);
     }
 
-    private bool IsBulletAlive()
+    private bool CanSpawnBullet()
     {
-        return (cacheBullet != null);
+        return (cacheBullet == null);
+    }
+
+    private void ReturnWalk()
+    {
+        anim.Play("Player_Walk", -1, 0f);
     }
 
     private void Debug_SpawnBullet()

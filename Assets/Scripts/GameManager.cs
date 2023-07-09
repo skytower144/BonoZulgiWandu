@@ -5,8 +5,11 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance { get; private set; }
-    [SerializeField] private Transform enemyParent;
-    [SerializeField] private GameObject player;
+
+    public Transform enemyParent;
+    public PlayerPhysics playerPhysics;
+    public PlayerBehaviour playerBehaviour;
+
     private List<GameObject> objects_ctrl = new List<GameObject>();
 
     void Awake()
@@ -18,7 +21,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        objects_ctrl.Add(player);
+        objects_ctrl.Add(playerPhysics.gameObject);
         foreach (Transform enemy in enemyParent) {
             objects_ctrl.Add(enemy.gameObject);
         }

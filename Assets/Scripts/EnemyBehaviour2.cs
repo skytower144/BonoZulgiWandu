@@ -24,7 +24,6 @@ public class EnemyBehaviour2 : MonoBehaviour, ObjectControl
         rb.velocity = Vector2.Reflect(lastVelocity, collision.contacts[0].normal);
 
         if (collision.gameObject.CompareTag("Bullet")) {
-            collision.gameObject.GetComponent<DragShoot>().PlayAngryAnimation();
             StartCoroutine(DestroyEnemy());
         }
     }

@@ -6,6 +6,7 @@ public class PlayerPhysics : MonoBehaviour, ObjectControl
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform colliderParent;
     [SerializeField] private Collider2D playerCollider;
+    [SerializeField] private FlashHitEffect flash;
 
     [SerializeField] private bool ignoreEnemyCollision;
 
@@ -69,5 +70,10 @@ public class PlayerPhysics : MonoBehaviour, ObjectControl
     public void PlayObject()
     {
         if (gameObject) Launch();
+    }
+
+    public void FlashEffect()
+    {
+        flash.Flash();
     }
 }
