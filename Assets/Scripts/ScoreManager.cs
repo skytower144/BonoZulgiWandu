@@ -51,4 +51,13 @@ public class ScoreManager : MonoBehaviour
         else comboText.color = Color.white;
     }
 
+    public void ResetScore()
+    {
+        currentScore = 0;
+        tempComboScore = 0;
+
+        SetCurrentScoreText();
+        comboText.text = $"x {0}";
+    }
+
 }

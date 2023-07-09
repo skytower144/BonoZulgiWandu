@@ -56,6 +56,7 @@ public class GameTimer : MonoBehaviour
 
     public void StartTimer()
     {
+        timer = maxTime;
         enableTimer = true;
     }
 

@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerPhysics : MonoBehaviour, ObjectControl
 {
     [SerializeField] private float speed;
-    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Rigidbody2D rb; public Rigidbody2D playerRb => rb;
     [SerializeField] private Transform colliderParent;
     [SerializeField] private Collider2D playerCollider;
     [SerializeField] private FlashHitEffect flash;
@@ -30,7 +30,7 @@ public class PlayerPhysics : MonoBehaviour, ObjectControl
         Launch();
     }
 
-    private void Launch()
+    public void Launch()
     {
         float x = Random.Range(0, 2) == 0 ? -1 : 1;
         float y = Random.Range(0, 2) == 0 ? -1 : 1;

@@ -13,11 +13,6 @@ public class PlayerBehaviour : MonoBehaviour
         InvokeRepeating("SpawnBullet", 1f, 1f);
     }
 
-    void Update()
-    {
-        Debug_SpawnBullet();
-    }
-
     private void SpawnBullet()
     {
         if (!CanSpawnBullet()) return;
@@ -44,9 +39,10 @@ public class PlayerBehaviour : MonoBehaviour
         anim.Play("Player_Walk", -1, 0f);
     }
 
-    private void Debug_SpawnBullet()
+    public void EraseBullet()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-            SpawnBullet();
+        if (cacheBullet)
+            Destroy(cacheBullet);
+        cacheBullet = null;
     }
 }

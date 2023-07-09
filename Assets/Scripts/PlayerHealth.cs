@@ -29,4 +29,12 @@ public class PlayerHealth : MonoBehaviour
         if (currentHealth <= 0) return;
         heartImageList[currentHealth - 1].SetActive(false);
     }
+
+    public void ResetHealth()
+    {
+        foreach (GameObject heart in heartImageList) {
+            heart.SetActive(true);
+        }
+        currentHealth = maxHealth = heartImageList.Count;
+    }
 }

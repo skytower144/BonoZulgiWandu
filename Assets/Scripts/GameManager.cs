@@ -55,14 +55,24 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Game Over.");
         isGameOver = true;
+        playerBehaviour.EraseBullet();
         gameTimer.StopTimer();
-
         gameOverUI.SetActive(true);
     }
 
     public void RetryGame()
     {
         isGameOver = false;
+
+        playerPhysics.transform.localPosition = new Vector2(0f, 0f);
+        playerPhysics.playerRb.velocity = Vector3.zero;
+        playerPhysics.Launch();
+
+        playerHealth.ResetHealth();
+        scoreManager.ResetScore();
+        
+        enemySpawner.ClearAllEnemy();
+        gameOverUI.SetActive(false);
     }
 
 }

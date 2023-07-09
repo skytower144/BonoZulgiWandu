@@ -78,4 +78,17 @@ public class EnemySpawner : MonoBehaviour
         isWaveCompleted = true;
         isBatchLoaded = false;
     }
+
+    public void ClearAllEnemy()
+    {
+        foreach (GameObject enemy in currentEnemies) {
+            Destroy(enemy);
+        }
+        currentEnemies.Clear();
+        waveNumber = 0;
+        totalSpawn = 0;
+
+        isWaveCompleted = true;
+        isBatchLoaded = false;
+    }
 }
