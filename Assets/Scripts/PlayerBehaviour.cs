@@ -32,7 +32,11 @@ public class PlayerBehaviour : MonoBehaviour
 
     private bool CanSpawnBullet()
     {
-        return (cacheBullet == null);
+        return ((cacheBullet == null) && !GameManager.instance.enemySpawner.isWaveCompleted && GameManager.instance.enemySpawner.isBatchLoaded);
+    }
+    public bool IsBulletAlive()
+    {
+        return (cacheBullet != null);
     }
 
     private void ReturnWalk()

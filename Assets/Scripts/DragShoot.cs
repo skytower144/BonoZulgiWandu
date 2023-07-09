@@ -51,7 +51,6 @@ public class DragShoot : MonoBehaviour
             if (!isReleased) PlayAngryToHappy();
             
             else {
-                PlayAngryAnimation();
                 StartCoroutine(other.gameObject.GetComponent<EnemyBehaviour2>().DestroyEnemy());
             }
         }

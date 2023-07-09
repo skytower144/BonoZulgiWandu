@@ -8,16 +8,12 @@ public class EnemyBehaviour2 : MonoBehaviour, ObjectControl
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private GameObject smoke;
     private Vector2 lastVelocity;
+    private bool isDestroyed = false;
 
     void FixedUpdate()
     {
         GetDirection();
         KeepSpeed();
-    }
-
-    void Start()
-    {
-        Launch();
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -46,8 +42,14 @@ public class EnemyBehaviour2 : MonoBehaviour, ObjectControl
 
     public IEnumerator DestroyEnemy()
     {
+        if (isDestroyed) yield break;
+
+        isDestroyed = true;
+
         Instantiate(smoke, transform).transform.SetParent(transform.parent);
         yield return new WaitForSecondsRealtime(0.05f);
+
+        GameManager.instance.enemySpawner.CheckNextWave();
         if (gameObject) Destroy(gameObject);
     }
 

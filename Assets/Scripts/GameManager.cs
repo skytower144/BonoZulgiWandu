@@ -6,9 +6,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance { get; private set; }
 
-    public Transform enemyParent;
     public PlayerPhysics playerPhysics;
     public PlayerBehaviour playerBehaviour;
+    public EnemySpawner enemySpawner;
 
     private List<GameObject> objects_ctrl = new List<GameObject>();
 
@@ -19,11 +19,13 @@ public class GameManager : MonoBehaviour
         instance = this;
     }
 
-    void Start()
+    public void SetEnemyObjectControl()
     {
+        objects_ctrl.Clear();
+
         objects_ctrl.Add(playerPhysics.gameObject);
-        foreach (Transform enemy in enemyParent) {
-            objects_ctrl.Add(enemy.gameObject);
+        foreach (GameObject enemy in enemySpawner.current_enemies) {
+            objects_ctrl.Add(enemy);
         }
     }
 
