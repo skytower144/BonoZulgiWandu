@@ -67,7 +67,7 @@ public class DragShoot : MonoBehaviour
     }
     void Update()
     {
-        if (!enableDrag) return;
+        if (!enableDrag || GameManager.instance.isGameOver) return;
         if (isCountdown) AliveTimeCountDown();
 
         if (isReleased) return;

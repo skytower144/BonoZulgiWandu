@@ -13,7 +13,10 @@ public class GameManager : MonoBehaviour
     public GameTimer gameTimer;
     public ScoreManager scoreManager;
 
+    [SerializeField] private GameObject gameOverUI;
+
     private List<GameObject> objects_ctrl = new List<GameObject>();
+    [System.NonSerialized] public bool isGameOver = false;
 
     void Awake()
     {
@@ -51,7 +54,15 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         Debug.Log("Game Over.");
+        isGameOver = true;
         gameTimer.StopTimer();
+
+        gameOverUI.SetActive(true);
+    }
+
+    public void RetryGame()
+    {
+        isGameOver = false;
     }
 
 }
