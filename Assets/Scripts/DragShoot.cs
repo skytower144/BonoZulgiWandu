@@ -38,11 +38,14 @@ public class DragShoot : MonoBehaviour
     }
     void Update()
     {
-        RotateBullet();
         AliveTimeCountDown();
+
+        if (isReleased) return;
+        RotateBullet();
 
         if (Input.GetMouseButtonDown(0))
         {
+            GameManager.instance.StopAllObjects();
             PressMouse();
         }
 
@@ -64,7 +67,6 @@ public class DragShoot : MonoBehaviour
 
     private void PressMouse()
     {
-        Time.timeScale = 0;
         rb.velocity = Vector3.zero;
         clickedPoint = transform.localPosition;
         isHolding = true;
@@ -74,7 +76,6 @@ public class DragShoot : MonoBehaviour
     {
         if (!isHolding) return;
 
-        Time.timeScale = 1;
         anim.Play("Bullet_Shoot", -1, 0f);
         releasePoint = cam.ScreenToWorldPoint(Input.mousePosition);
 
@@ -134,6 +135,7 @@ public class DragShoot : MonoBehaviour
 
     private void AliveTimeOut()
     {
+        GameManager.instance.PlayAllObjects();
         Destroy(gameObject);
     }
 }

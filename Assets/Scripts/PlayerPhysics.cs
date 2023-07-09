@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerPhysics : MonoBehaviour
+public class PlayerPhysics : MonoBehaviour, ObjectControl
 {
     [SerializeField] private float speed;
     [SerializeField] private Rigidbody2D rb;
@@ -16,7 +14,7 @@ public class PlayerPhysics : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
-            return; //Debug.Log("hit");
+            return;
     }
 
     void FixedUpdate()
@@ -61,5 +59,15 @@ public class PlayerPhysics : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         rb.velocity = Vector2.Reflect(lastVelocity, collision.contacts[0].normal);
+    }
+
+    public void StopObject()
+    {
+        rb.velocity = Vector3.zero;
+    }
+
+    public void PlayObject()
+    {
+        if (gameObject) Launch();
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBehaviour2 : MonoBehaviour
+public class EnemyBehaviour2 : MonoBehaviour, ObjectControl
 {
     [SerializeField] private float speed;
     [SerializeField] private Rigidbody2D rb;
@@ -52,5 +52,15 @@ public class EnemyBehaviour2 : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(0.05f);
         Destroy(gameObject);
+    }
+
+    public void StopObject()
+    {
+        rb.velocity = Vector3.zero;
+    }
+
+    public void PlayObject()
+    {
+        Launch();
     }
 }
