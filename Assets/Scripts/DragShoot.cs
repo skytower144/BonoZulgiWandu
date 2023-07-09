@@ -5,6 +5,8 @@ using UnityEngine;
 public class DragShoot : MonoBehaviour
 {
     [SerializeField] private float speed;
+    [SerializeField] private float aliveTime;
+
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private TrajectoryRenderer tr;
     [SerializeField] private Animator anim;
@@ -12,17 +14,24 @@ public class DragShoot : MonoBehaviour
     private Vector3 clickedPoint, releasePoint, movDir;
     private Camera cam;
     private bool isHolding = false;
+    private bool isReleased = false;
+
+    private Vector2 lastVelocity;
 
     void Start()
     {
         cam = Camera.main;
     }
 
+    void FixedUpdate()
+    {
+        lastVelocity = rb.velocity;
+    }
+
     void OnCollisionEnter2D(Collision2D other)
     {
-        movDir = Vector2.Reflect(movDir, other.contacts[0].normal).normalized;
-        rb.velocity = movDir * speed * 0.3f;
-        RotateSprite(movDir);
+        rb.velocity = Vector2.Reflect(lastVelocity, other.contacts[0].normal);
+        RotateSprite(rb.velocity);
 
         if (other.gameObject.CompareTag("Wall"))
             PlayAngryAnimation();
@@ -30,6 +39,7 @@ public class DragShoot : MonoBehaviour
     void Update()
     {
         RotateBullet();
+        AliveTimeCountDown();
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -67,7 +77,9 @@ public class DragShoot : MonoBehaviour
         Time.timeScale = 1;
         anim.Play("Bullet_Shoot", -1, 0f);
         releasePoint = cam.ScreenToWorldPoint(Input.mousePosition);
+
         isHolding = false;
+        isReleased = true;
     }
 
     private void MoveBullet()
@@ -109,5 +121,19 @@ public class DragShoot : MonoBehaviour
     private void ReturnShootingAnimation()
     {
         anim.Play("Bullet_Shoot", -1, 0f);
+    }
+
+    private void AliveTimeCountDown()
+    {
+        if (!isReleased) return;
+
+        aliveTime -= Time.deltaTime;
+        if (aliveTime < 0)
+            AliveTimeOut();
+    }
+
+    private void AliveTimeOut()
+    {
+        Destroy(gameObject);
     }
 }
