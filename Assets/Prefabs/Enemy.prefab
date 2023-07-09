@@ -102,6 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 1.2
   rb: {fileID: 8878565707229376106}
+  smoke: {fileID: 8642871750552118823, guid: b18bf0237b4dbc544aae170bca4023c8, type: 3}
 --- !u!61 &8584748216473533785
 BoxCollider2D:
   m_ObjectHideFlags: 0

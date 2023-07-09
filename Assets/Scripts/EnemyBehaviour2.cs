@@ -6,6 +6,7 @@ public class EnemyBehaviour2 : MonoBehaviour, ObjectControl
 {
     [SerializeField] private float speed;
     [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private GameObject smoke;
     private Vector2 lastVelocity;
 
     void FixedUpdate()
@@ -22,10 +23,6 @@ public class EnemyBehaviour2 : MonoBehaviour, ObjectControl
     void OnCollisionEnter2D(Collision2D collision)
     {
         rb.velocity = Vector2.Reflect(lastVelocity, collision.contacts[0].normal);
-
-        if (collision.gameObject.CompareTag("Bullet")) {
-            StartCoroutine(DestroyEnemy());
-        }
     }
 
     private void Launch()
@@ -47,10 +44,11 @@ public class EnemyBehaviour2 : MonoBehaviour, ObjectControl
         lastVelocity = rb.velocity;
     }
 
-    IEnumerator DestroyEnemy()
+    public IEnumerator DestroyEnemy()
     {
+        Instantiate(smoke, transform).transform.SetParent(transform.parent);
         yield return new WaitForSecondsRealtime(0.05f);
-        Destroy(gameObject);
+        if (gameObject) Destroy(gameObject);
     }
 
     public void StopObject()

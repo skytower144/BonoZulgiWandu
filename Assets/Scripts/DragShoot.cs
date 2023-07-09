@@ -1,6 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class DragShoot : MonoBehaviour
 {
@@ -11,6 +11,7 @@ public class DragShoot : MonoBehaviour
     [SerializeField] private Collider2D bulletCollider;
     [SerializeField] private TrajectoryRenderer tr;
     [SerializeField] private Animator anim;
+    [SerializeField] private GameObject reflectEffect;
 
     private Vector3 clickedPoint, releasePoint, movDir;
     private Camera cam;
@@ -23,6 +24,8 @@ public class DragShoot : MonoBehaviour
     void Start()
     {
         cam = Camera.main;
+        DOTween.Rewind("SpinBullet");
+        DOTween.Play("SpinBullet");
     }
 
     void FixedUpdate()
@@ -32,16 +35,30 @@ public class DragShoot : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
+        if (other.gameObject.CompareTag("Player")) {
+            if (isReleased) {
+                GameManager.instance.playerPhysics.FlashEffect();
+                rb.velocity = Vector3.zero;
+                anim.Play("Bullet_Die", -1, 0f);
+                return;
+            }
+        }
+        
         rb.velocity = Vector2.Reflect(lastVelocity, other.contacts[0].normal);
         RotateSprite(rb.velocity);
 
         if (other.gameObject.CompareTag("Enemy")) {
             if (!isReleased) PlayAngryToHappy();
-            else PlayAngryAnimation();
+            
+            else {
+                PlayAngryAnimation();
+                StartCoroutine(other.gameObject.GetComponent<EnemyBehaviour2>().DestroyEnemy());
+            }
         }
-        
-        if (other.gameObject.CompareTag("Player"))
-            GameManager.instance.playerPhysics.FlashEffect();
+
+        else if (other.gameObject.CompareTag("Wall")) {
+            WallHit(transform.localPosition, other.gameObject.GetComponent<WallType>().side);
+        }
     }
     void Update()
     {
@@ -54,6 +71,8 @@ public class DragShoot : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             GameManager.instance.StopAllObjects();
+            DOTween.Pause("SpinBullet");
+            DOTween.Rewind("SpinBullet");
             PressMouse();
         }
 
@@ -148,10 +167,10 @@ public class DragShoot : MonoBehaviour
 
         aliveTime -= Time.deltaTime;
         if (aliveTime < 0)
-            AliveTimeOut();
+            DestroyBullet();
     }
 
-    private void AliveTimeOut()
+    private void DestroyBullet()
     {
         GameManager.instance.PlayAllObjects();
         Destroy(gameObject);
@@ -162,5 +181,29 @@ public class DragShoot : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.2f);
         bulletCollider.enabled = true;
         enableDrag = true;
+    }
+
+    private void WallHit(Vector2 pos, WallSide side)
+    {
+        GameObject effect = Instantiate(reflectEffect);
+        effect.transform.localPosition = new Vector2(pos.x, pos.y);
+
+        switch (side) {
+            case WallSide.Top:
+                effect.transform.localScale = new Vector2(1, -1);
+                break;
+            
+            case WallSide.Left:
+                effect.transform.rotation = Quaternion.Euler(0, 0, -90);
+                break;
+            
+            case WallSide.Right:
+                effect.transform.rotation = Quaternion.Euler(0, 0, 90);
+                break;
+            
+            default:
+                break;
+        }
+        
     }
 }
