@@ -21,9 +21,11 @@ public class DragShoot : MonoBehaviour
     private bool isCountdown = false;
 
     private Vector2 lastVelocity;
+    private int currentCombo = 0;
 
     void Start()
     {
+        currentCombo = 0;
         cam = Camera.main;
         DOTween.Rewind("SpinBullet");
         DOTween.Play("SpinBullet");
@@ -53,6 +55,8 @@ public class DragShoot : MonoBehaviour
             if (!isReleased) PlayAngryToHappy();
             
             else {
+                currentCombo++;
+                GameManager.instance.scoreManager.UpdateComboScore(other.gameObject.GetComponent<EnemyBehaviour2>().enemy_type, currentCombo);
                 StartCoroutine(other.gameObject.GetComponent<EnemyBehaviour2>().DestroyEnemy());
             }
         }
@@ -175,6 +179,7 @@ public class DragShoot : MonoBehaviour
     private void DestroyBullet()
     {
         GameManager.instance.PlayAllObjects();
+        GameManager.instance.scoreManager.CalculateFinalComboScore(currentCombo);
         Destroy(gameObject);
     }
 

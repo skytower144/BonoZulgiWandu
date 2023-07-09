@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyBehaviour2 : MonoBehaviour, ObjectControl
 {
+    [SerializeField] private EnemyType enemyType; public EnemyType enemy_type => enemyType;
     [SerializeField] private float speed;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private GameObject smoke;
@@ -47,10 +48,9 @@ public class EnemyBehaviour2 : MonoBehaviour, ObjectControl
         isDestroyed = true;
 
         Instantiate(smoke, transform).transform.SetParent(transform.parent);
-        yield return new WaitForSecondsRealtime(0.05f);
 
         GameManager.instance.enemySpawner.CheckNextWave();
-        if (gameObject) Destroy(gameObject);
+        Destroy(gameObject);
     }
 
     public void StopObject()
@@ -63,3 +63,5 @@ public class EnemyBehaviour2 : MonoBehaviour, ObjectControl
         Launch();
     }
 }
+
+public enum EnemyType { Knight }

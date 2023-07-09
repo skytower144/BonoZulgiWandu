@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private int waveNumber;
+    private int waveNumber;
     [SerializeField] private LayerMask layer;
-    public List<EnemyBatch> waves;
+    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private int minEnemyCount, maxEnemyCount;
 
     private List<GameObject> currentEnemies; public List<GameObject> current_enemies => currentEnemies;
     private Bounds colliderBounds;
@@ -36,11 +37,10 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnBatch()
     {
-        if (waves.Count <= waveNumber) {
-            Debug.Log("All waves completed.");
-            return;
-        }
-        totalSpawn = waves[waveNumber].count;
+        if (waveNumber == 0)
+            GameManager.instance.gameTimer.StartTimer();
+
+        totalSpawn = Random.Range(minEnemyCount, maxEnemyCount);
         currentEnemies = new List<GameObject>();
 
         while (currentEnemies.Count < totalSpawn)
@@ -50,7 +50,7 @@ public class EnemySpawner : MonoBehaviour
 
             Vector2 randomPos = new Vector2(randomX, randomY);
 
-            GameObject enemy = Instantiate(waves[waveNumber].enemy, randomPos, Quaternion.identity, transform);
+            GameObject enemy = Instantiate(enemyPrefab, randomPos, Quaternion.identity, transform);
 
             if (CheckOverlap(enemy)) {
                 Destroy(enemy);
@@ -78,11 +78,4 @@ public class EnemySpawner : MonoBehaviour
         isWaveCompleted = true;
         isBatchLoaded = false;
     }
-}
-
-[System.Serializable]
-public class EnemyBatch
-{
-    public GameObject enemy;
-    public int count;
 }

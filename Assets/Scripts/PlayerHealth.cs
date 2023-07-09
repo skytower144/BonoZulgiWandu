@@ -18,8 +18,10 @@ public class PlayerHealth : MonoBehaviour
         SetHeartUI();
         currentHealth -= amount;
 
-        if (currentHealth < 0)
+        if (currentHealth <= 0) {
             currentHealth = 0;
+            GameManager.instance.GameOver();
+        }
     }
 
     private void SetHeartUI()

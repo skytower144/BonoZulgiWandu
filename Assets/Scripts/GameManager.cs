@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     public PlayerBehaviour playerBehaviour;
     public PlayerHealth playerHealth;
     public EnemySpawner enemySpawner;
+    public GameTimer gameTimer;
+    public ScoreManager scoreManager;
 
     private List<GameObject> objects_ctrl = new List<GameObject>();
 
@@ -44,6 +46,12 @@ public class GameManager : MonoBehaviour
             if (ctrl)
                 ctrl.GetComponent<ObjectControl>().PlayObject();
         }
+    }
+
+    public void GameOver()
+    {
+        Debug.Log("Game Over.");
+        gameTimer.StopTimer();
     }
 
 }
